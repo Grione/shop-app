@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Header from "./components/Header";
 import { useEffect } from "react";
 import MealItem from "./components/MealItem";
+import { CartContext } from "./store/cart-context";
 
 function App() {
   const [meals, setMeals] = useState([]);
@@ -18,16 +19,22 @@ function App() {
     }
 
     getMeals();
-  }, [])
+  }, []);
+
+  const ctxValue = {
+    items: [],
+  }
+
+
   return (
-    <>
+    <CartContext.Provider value={ctxValue}>
       <Header />
       <ul id="meals">
         {
-          meals.map((meal) => <MealItem meal={meal} />)
+          meals.map((meal) => <MealItem meal={meal} key={meal.id}/>)
         }
       </ul>
-    </>
+    </CartContext.Provider>
   );
 }
 

@@ -7,7 +7,7 @@ export default function MealItem({ meal }) {
   ).format(meal.price)
 
   return (
-    <li className="meal-item" key={meal.id}>
+    <li className="meal-item">
 
       <article>
         <img src={`http://localhost:3000/${meal.image}`} alt="" />
