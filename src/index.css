@@ -260,3 +260,13 @@ h1 {
     transform: translateY(0);
   }
 }
+
+
+/* add styles */
+.header-cart {
+  background: transparent;
+  border: none;
+  padding: 10px;
+  color: #ffab04;
+  cursor: pointer;
+}
