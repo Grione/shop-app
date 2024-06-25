@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import Header from "./components/Header.jsx";
-import MealItem from "./components/MealItem";
-import Modal from "./components/Modal";
-import CartContextComponent from "./store/cart-context";
 import { createPortal } from "react-dom";
+
+import Header from "./components/Header.jsx";
+import MealItem from "./components/MealItem.jsx";
+import Modal from "./components/Modal.jsx";
+import Cart from "./components/Cart.jsx";
+
+import CartContextComponent from "./store/cart-context.jsx";
+
 
 function App() {
   const [meals, setMeals] = useState([]);
@@ -29,16 +33,21 @@ function App() {
   }
 
   return (
-    <CartContextComponent>
-      <Header openCart={handleOpenCart} />
-      <ul id="meals">
-        {
-          meals.map((meal) => <MealItem meal={meal} key={meal.id} />)
-        }
-      </ul>
+    <>
+      <CartContextComponent>
+        <Header openCart={handleOpenCart} />
 
-      {createPortal(<Modal ref={modalRef}></Modal>, document.getElementById('modal'))}
-    </CartContextComponent>
+        <ul id="meals">
+          {
+            meals.map((meal) => <MealItem meal={meal} key={meal.id} />)
+          }
+        </ul>
+
+        {createPortal(<Modal ref={modalRef}><Cart /></Modal>,
+          document.getElementById('modal'))}
+      </CartContextComponent>
+
+    </>
   );
 }
 

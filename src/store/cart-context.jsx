@@ -5,6 +5,7 @@ function reducer(state, action) {
     case 'ADD_MEAL':
       const newMeal = {
         id: action.payload.id,
+        name: action.payload.name,
         price: action.payload.price,
         quantity: 1
       }
@@ -34,6 +35,27 @@ function reducer(state, action) {
 
       break;
     case 'DELETE_MEAL':
+      const indexMeal = state.items.findIndex((i) => i.id === action.payload.id);
+
+      if (action.payload.quantity === 1) {
+        return {
+          ...state,
+          items: state.items.splice(indexMeal, 1)
+        }
+      }
+      return {
+        ...state,
+        items: [...state.items.map((item) => {
+          if (item.id === action.payload.id) {
+            return {
+              ...action.payload,
+              quantity: item.quantity - 1
+            }
+          } else {
+            return item;
+          }
+        })]
+      }
       break
     default:
       break;
@@ -43,6 +65,7 @@ function reducer(state, action) {
 export const CartContext = createContext({
   items: [],
   addMeal: () => { },
+  deleteMeal: () => { }
 })
 
 export default function CartContextComponent({ children }) {
@@ -50,10 +73,15 @@ export default function CartContextComponent({ children }) {
   const [cartStore, dispatch] = useReducer(reducer, {
     items: [],
     addMeal: addMealHandler,
+    deleteMeal: deleteMealHandler,
   })
 
   function addMealHandler(object) {
     dispatch({ type: 'ADD_MEAL', payload: object })
+  }
+
+  function deleteMealHandler(object) {
+    dispatch({ type: 'DELETE_MEAL', payload: object })
   }
 
   return <CartContext.Provider value={cartStore}>{children}</CartContext.Provider>
