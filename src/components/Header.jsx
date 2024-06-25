@@ -1,6 +1,11 @@
+import { useContext } from 'react';
+import { CartContext } from '../store/cart-context';
+
 import headerLogo from '../assets/logo.jpg';
 
 export default function Header() {
+  const cartCtx = useContext(CartContext);
+
   return (
     <header id="main-header">
       <div id="title">
@@ -8,7 +13,7 @@ export default function Header() {
         <h1>Reactfood</h1>
       </div>
       <button className='header-cart'>
-        <span>Cart()</span>
+        <span>Cart({cartCtx.items.length})</span>
       </button>
     </header>
   )
