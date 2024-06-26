@@ -11,7 +11,10 @@ import { OrderContext } from "./store/order-context.jsx";
 
 function App() {
   const [meals, setMeals] = useState([]);
+
   const modalRef = useRef();
+  const formRef = useRef(null);
+
   const { status } = useContext(OrderContext);
 
   useEffect(() => {
@@ -32,26 +35,27 @@ function App() {
     modalRef.current.showModal();
   }
 
+  function submitOrderHandler() {
+    formRef.current.requestSubmit()
+  }
+
   let modalRenderComponent;
 
   if (status === 'cart') {
     modalRenderComponent = <Cart />
   } else if (status === 'checkout') {
-    modalRenderComponent = <CheckoutForm />
+    modalRenderComponent = <CheckoutForm ref={formRef} />
   }
-
-  console.log('rerender');
 
   return (
     <>
       <Header openCart={handleOpenCart} />
-
       <ul id="meals">{
         meals.map((meal) => <MealItem meal={meal} key={meal.id} />)
       }
       </ul>
 
-      {createPortal(<Modal ref={modalRef}>{modalRenderComponent}</Modal>,
+      {createPortal(<Modal ref={modalRef} onSubmit={submitOrderHandler}>{modalRenderComponent}</Modal>,
         document.getElementById('modal'))}
 
     </>

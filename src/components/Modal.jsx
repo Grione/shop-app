@@ -13,6 +13,8 @@ const Modal = forwardRef(function Modal(props, ref) {
   function handlerNextModal() {
     if(status === 'cart') {
       goToCheckout();
+    } else if(status === 'checkout') {
+      props.onSubmit();
     }
   }
 

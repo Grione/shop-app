@@ -33,7 +33,7 @@ export const OrderContext = createContext({
   status: 'cart',
   goToCheckout: () => { },
   goToCart: () => { },
-  goToAccess: () => { }
+  goToSuccess: () => { }
 });
 
 export default function OrderContextComponent({ children }) {
@@ -41,7 +41,7 @@ export default function OrderContextComponent({ children }) {
     status: 'cart',
     goToCheckout: goToCheckout,
     goToCart: goToCart,
-    goToAccess: goToAccess
+    goToSuccess: goToSuccess
   });
 
   function goToCheckout() {
@@ -52,8 +52,8 @@ export default function OrderContextComponent({ children }) {
     dispatch({ type: 'CART' })
   }
 
-  function goToAccess() {
-    dispatch({ type: 'ACCESS' })
+  function goToSuccess() {
+    dispatch({ type: 'SUCCESS' })
   }
 
   return <OrderContext.Provider value={orderStore}>{children}</OrderContext.Provider>
