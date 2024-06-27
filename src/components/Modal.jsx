@@ -7,9 +7,7 @@ const Modal = forwardRef(function Modal(props, ref) {
   const { status, goToCheckout, goToCart } = useContext(OrderContext);
 
   function handleCloseModal() {
-    if (status === 'success') {
-      goToCart();
-    }
+    goToCart();
     ref.current.close();
   }
 

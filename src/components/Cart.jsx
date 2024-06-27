@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../store/cart-context";
+import formatPrice from "../utils/format-number.js";
 
 
 export default function Cart() {
@@ -13,12 +14,7 @@ export default function Cart() {
     return accum + (item.price * item.quantity)
   }, 0);
 
-  const totalFixed = new Intl.NumberFormat('en-US',
-    {
-      style: "currency",
-      currency: "EUR"
-    }
-  ).format(total.toFixed(2));
+  const totalFixed = formatPrice(total);
 
 
   if (items.length < 1) return <h2>Your Cart is empty</h2>
@@ -28,12 +24,7 @@ export default function Cart() {
       <h2>Your Cart</h2>
       <ul>
         {items.map((item) => {
-          const currencyPrice = new Intl.NumberFormat('en-US',
-            {
-              style: "currency",
-              currency: "EUR"
-            }
-          ).format(item.price);
+          const currencyPrice = formatPrice(item.price);
 
           return (
             <li className="cart-item" key={item.id}>

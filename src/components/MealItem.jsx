@@ -1,13 +1,9 @@
 import { useContext } from "react";
 import { CartContext } from "../store/cart-context";
+import formatPrice from "../utils/format-number.js";
 
 export default function MealItem({ meal }) {
-  const currencyPrice = new Intl.NumberFormat('en-US',
-    {
-      style: "currency",
-      currency: "EUR"
-    }
-  ).format(meal.price);
+  const formattedPrice = formatPrice(meal.price);
 
   const { addMeal } = useContext(CartContext);
 
@@ -18,7 +14,7 @@ export default function MealItem({ meal }) {
         <img src={`http://localhost:3000/${meal.image}`} alt="" />
         <h3>{meal.name}</h3>
         <div className="meal-item-price">
-          <span>{currencyPrice}</span>
+          <span>{formattedPrice}</span>
         </div>
         <p className="meal-item-description">
           {meal.description}

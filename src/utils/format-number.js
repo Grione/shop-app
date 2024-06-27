@@ -4,7 +4,7 @@ function formatPrice(num) {
       style: "currency",
       currency: "EUR"
     }
-  ).format(num.toFixed(2));
+  ).format((+num).toFixed(2));
 
   return totalFixed;
 }
