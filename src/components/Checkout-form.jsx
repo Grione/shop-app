@@ -6,7 +6,7 @@ import { OrderContext } from "../store/order-context.jsx";
 
 const CheckoutForm = forwardRef(function CheckoutForm(props, ref) {
 
-  const { items } = useContext(CartContext);
+  const { items, clearCart } = useContext(CartContext);
   const { goToSuccess } = useContext(OrderContext)
 
   const total = items.reduce((accum, item) => {
@@ -55,6 +55,7 @@ const CheckoutForm = forwardRef(function CheckoutForm(props, ref) {
         if (data) {
           console.log(data);
           goToSuccess();
+          clearCart();
         }
 
       } catch (error) {

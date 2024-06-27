@@ -45,6 +45,8 @@ function App() {
     modalRenderComponent = <Cart />
   } else if (status === 'checkout') {
     modalRenderComponent = <CheckoutForm ref={formRef} />
+  } else if (status === 'success') {
+    modalRenderComponent = (<div><h2>Success!</h2><p>Your order was submitted successfully.</p></div>)
   }
 
   return (

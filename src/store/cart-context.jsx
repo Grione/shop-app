@@ -57,6 +57,12 @@ function reducer(state, action) {
         })]
       }
       break
+    case 'CLEAR_CART':
+      return {
+        ...state,
+        items: [],
+      }
+      break
     default:
       break;
   }
@@ -65,7 +71,8 @@ function reducer(state, action) {
 export const CartContext = createContext({
   items: [],
   addMeal: () => { },
-  deleteMeal: () => { }
+  deleteMeal: () => { },
+  clearCart: () => { }
 })
 
 export default function CartContextComponent({ children }) {
@@ -74,6 +81,7 @@ export default function CartContextComponent({ children }) {
     items: [],
     addMeal: addMealHandler,
     deleteMeal: deleteMealHandler,
+    clearCart: clearCartHandler
   })
 
   function addMealHandler(object) {
@@ -82,6 +90,10 @@ export default function CartContextComponent({ children }) {
 
   function deleteMealHandler(object) {
     dispatch({ type: 'DELETE_MEAL', payload: object })
+  }
+
+  function clearCartHandler() {
+    dispatch({ type: 'CLEAR_CART' })
   }
 
   return <CartContext.Provider value={cartStore}>{children}</CartContext.Provider>
