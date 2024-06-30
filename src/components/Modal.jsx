@@ -1,43 +1,21 @@
-import { forwardRef, useContext } from "react";
-import { CartContext } from "../store/cart-context";
-import { OrderContext } from "../store/order-context";
+import { createRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
-const Modal = forwardRef(function Modal(props, ref) {
-  const { items } = useContext(CartContext);
-  const { status, goToCheckout, goToCart } = useContext(OrderContext);
+export default function Modal({ open, children }) {
+  const modalRef = createRef()
 
-  function handleCloseModal() {
-    goToCart();
-    ref.current.close();
-  }
-
-  function handlerNextModal() {
-    if (status === 'cart') {
-      goToCheckout();
-    } else if (status === 'checkout') {
-      props.onSubmit();
+  useEffect(() => {
+    if (open) {
+      modalRef.current.showModal();
+    } else {
+      modalRef.current.close();
     }
-  }
-
-  let nextAction = null;
-
-  if (items.length > 0 && status !== 'success') {
-    nextAction = <button className="button" onClick={handlerNextModal}>Go to Checkout</button>;
-  } else if (status === 'success') {
-    nextAction = null;
-  }
+  }, [open]);
 
   return (
-    <dialog className="modal" ref={ref}>
-      {props.children}
-      <div className="modal-actions">
-        <button className="text-button" onClick={handleCloseModal}>Close</button>
-        {
-          nextAction
-        }
-      </div>
-    </dialog>
-  )
-});
+    createPortal(<dialog className="modal" ref={modalRef}>
+      {children}
+    </dialog>, document.getElementById('modal'))
 
-export default Modal;
+  )
+};
