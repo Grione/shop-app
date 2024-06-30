@@ -3,6 +3,15 @@ import Input from "./Input.jsx";
 import { CartContext } from "../store/cart-context.jsx";
 import formatPrice from "../utils/format-number.js";
 import { OrderContext } from "../store/order-context.jsx";
+import useHttp from "../hooks/useHttp.js";
+import Error from "./Error.jsx";
+
+const requestConfig = {
+  method: 'POST',
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  }
+}
 
 const CheckoutForm = forwardRef(function CheckoutForm(props, ref) {
 
@@ -15,58 +24,36 @@ const CheckoutForm = forwardRef(function CheckoutForm(props, ref) {
 
   const totalFormatted = formatPrice(total);
 
+  const { data, isLoading, error, sendRequest } = useHttp('http://localhost:3000/orderss', requestConfig)
+
   function submitHandler(event) {
 
     event.preventDefault();
     const formData = new FormData(event.target)
 
-    const customer = {}
-    for (var p of formData) {
-      let name = p[0];
-      let value = p[1];
-      customer[name] = value;
+    const customer = {};
+
+    for (const [key, value] of formData) {
+      customer[key] = value;
     }
 
-    async function postOrder() {
-      try {
-        const res = await fetch('http://localhost:3000/orders', {
-          method: 'POST',
-          body: JSON.stringify({
-            order: {
-              items: items,
-              customer: customer
-            }
-          }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
-        });
-
-        console.log(res);
-
-        if (!res.ok) {
-          throw Error('Post data failed!')
-        }
-
-        const data = await res.json();
-
-
-
-        if (data) {
-          console.log(data);
-          goToSuccess();
-          clearCart();
-        }
-
-      } catch (error) {
-        console.error(error);
+    sendRequest(JSON.stringify({
+      order: {
+        items: items,
+        customer: customer
       }
+    }));
+
+    console.log(data, error);
+
+    if (!error) {
+      goToSuccess();
+      clearCart();
     }
 
-    postOrder();
-
-    console.log(customer)
   }
+
+
   return (
     <div className="checkout">
       <h2>Checkout</h2>
@@ -80,6 +67,10 @@ const CheckoutForm = forwardRef(function CheckoutForm(props, ref) {
           <Input name={'city'} label={'City'} />
         </div>
       </form>
+
+      {error && <Error title='Failed to submit order' message={error} />}
+
+      {isLoading && <p>Sending order data...</p>}
     </div>
   )
 });

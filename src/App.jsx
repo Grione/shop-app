@@ -8,28 +8,21 @@ import Cart from "./components/Cart.jsx";
 import CheckoutForm from "./components/CheckoutForm.jsx";
 
 import { OrderContext } from "./store/order-context.jsx";
+import useHttp from "./hooks/useHttp.js";
+import Error from "./components/Error.jsx";
+
+const requestConfig = {};
 
 function App() {
-  const [meals, setMeals] = useState([]);
-
   const modalRef = useRef();
   const formRef = useRef(null);
 
   const { status } = useContext(OrderContext);
 
-  useEffect(() => {
-    async function getMeals() {
-      try {
-        const response = await fetch('http://localhost:3000/meals');
-        const data = await response.json();
-        setMeals(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getMeals();
-  }, []);
+  const {
+    data: meals,
+    isLoading,
+    error } = useHttp('http://localhost:3000/meals', requestConfig, []);
 
   function handleOpenCart() {
     modalRef.current.showModal();
@@ -47,6 +40,14 @@ function App() {
     modalRenderComponent = <CheckoutForm ref={formRef} />
   } else if (status === 'success') {
     modalRenderComponent = (<div><h2>Success!</h2><p>Your order was submitted successfully.</p></div>)
+  }
+
+  if (isLoading) {
+    return <p className="center">Loading meals...</p>
+  }
+
+  if (error) {
+    return <Error title='Error Fetch Meals' message={error} />
   }
 
   return (
