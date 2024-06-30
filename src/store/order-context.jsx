@@ -2,6 +2,13 @@ import { createContext, useReducer } from "react";
 
 function reducer(state, action) {
   switch (action.type) {
+    case 'DEFAULT':
+      return {
+        ...state,
+        status: 'default'
+      }
+
+      break;
     case 'CART':
       return {
         ...state,
@@ -16,13 +23,6 @@ function reducer(state, action) {
       }
       break
 
-    case 'SUCCESS':
-      return {
-        ...state,
-        status: 'success'
-      }
-      break
-
     default:
       return { ...state }
       break;
@@ -30,19 +30,23 @@ function reducer(state, action) {
 }
 
 export const OrderContext = createContext({
-  status: 'cart',
+  status: 'default',
+  setDefault: () => { },
   goToCheckout: () => { },
   goToCart: () => { },
-  goToSuccess: () => { }
 });
 
 export default function OrderContextComponent({ children }) {
   const [orderStore, dispatch] = useReducer(reducer, {
-    status: 'cart',
+    status: 'default',
+    setDefault: setDefault,
     goToCheckout: goToCheckout,
     goToCart: goToCart,
-    goToSuccess: goToSuccess
-  });
+ });
+
+  function setDefault() {
+    dispatch({ type: 'DEFAULT' })
+  }
 
   function goToCheckout() {
     dispatch({ type: 'CHECKOUT' })
@@ -50,10 +54,6 @@ export default function OrderContextComponent({ children }) {
 
   function goToCart() {
     dispatch({ type: 'CART' })
-  }
-
-  function goToSuccess() {
-    dispatch({ type: 'SUCCESS' })
   }
 
   return <OrderContext.Provider value={orderStore}>{children}</OrderContext.Provider>
