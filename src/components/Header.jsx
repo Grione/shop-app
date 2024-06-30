@@ -1,10 +1,12 @@
+import headerLogo from '../assets/logo.jpg';
+
 import { useContext } from 'react';
 import { CartContext } from '../store/cart-context';
-
-import headerLogo from '../assets/logo.jpg';
+import { OrderContext } from '../store/order-context';
 
 export default function Header({ openCart }) {
   const cartCtx = useContext(CartContext);
+  const { goToCart } = useContext(OrderContext);
 
   return (
     <header id="main-header">
@@ -12,7 +14,7 @@ export default function Header({ openCart }) {
         <img src={headerLogo} alt="Reactfood logo" />
         <h1>Reactfood</h1>
       </div>
-      <button className='header-cart' onClick={openCart}>
+      <button className='header-cart' onClick={goToCart}>
         <span>Cart({cartCtx.items.length})</span>
       </button>
     </header>
