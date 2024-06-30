@@ -5,7 +5,7 @@ import Header from "./components/Header.jsx";
 import MealItem from "./components/MealItem.jsx";
 import Modal from "./components/Modal.jsx";
 import Cart from "./components/Cart.jsx";
-import CheckoutForm from "./components/Checkout-form.jsx";
+import CheckoutForm from "./components/CheckoutForm.jsx";
 
 import { OrderContext } from "./store/order-context.jsx";
 
